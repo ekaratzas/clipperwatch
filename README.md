@@ -11,24 +11,27 @@
 - **Spacecraft "Comet Tail":** Visualizes the trail of the Clipper's trajectory.
 
 ## 🛠️ Install dependencies
-> pip install astropy astroquery matplotlib numpy
-or
-> sudo apt install python3-astropy python3-astroquery python3-matplotlib python3-numpy 
+
+    pip install astropy astroquery matplotlib numpy
+
+### Debian systems
+
+    sudo apt install python3-astropy python3-astroquery python3-matplotlib python3-numpy 
 
 ## 🖥️ Usage
 
 Run the script directly to open an interactive window:
 
-> python ClipperWatch.py
+    python3 clipperwatch.py
 
 Command Line Arguments
 Argument	Description
 --save	Saves the output directly to disk instead of opening a window.
 --output <name>.png	Sets a custom filename for the saved image (Default: clipper_watch.png).
 
-Example (for wallpaper automation):
+Example:
 
-> python3 ClipperWatch.py --save --output lockscreen.png
+    python3 clipperwatch.py --save --output lockscreen.png
 
 ## 📟 Systemd Integration
 
@@ -52,7 +55,9 @@ Then
 ## 📊 Math & Data
 
 Data Source: [NASA/JPL Horizons API](https://ssd.jpl.nasa.gov/horizons/manual.html)
+
 Coordinate System: Heliocentric Ecliptic (J2000)
+
 Scale: 1 unit = 1 Astronomical Unit (AU).
 
 **Disclaimer:** This project is a fan-made tool and is not officially affiliated with NASA or JPL.
