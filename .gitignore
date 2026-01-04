@@ -1,0 +1,13 @@
+# ClipperWatch generated images
+*.png
+!screenshots/clipper_watch.png
+
+# Python environment and cache
+__pycache__/
+*.py[cod]
+*$py.class
+venv/
+.env
+
+# MacOS system files
+.DS_Store

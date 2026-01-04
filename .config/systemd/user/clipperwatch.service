@@ -1,0 +1,11 @@
+[Unit]
+Description=Update ClipperWatch Wallpaper
+Wants=network-online.target
+After=network-online.target
+
+[Service]
+Type=oneshot
+ExecStart=/usr/bin/python3 /path/to/your/ClipperWatch.py --save --output /usr/local/share/backgrounds/clipper_watch.png
+
+[Install]
+WantedBy=default.target
