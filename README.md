@@ -1,6 +1,6 @@
 # 🛰️ ClipperWatch
 
-**ClipperWatch** is a high-fidelity orbital tracking dashboard for NASA's Europa Clipper mission. It pulls real-time telemetry from JPL Horizons to render a mathematically accurate, minimalist 1080p map of the solar system, designed for use as a desktop lock screen / wallpaper.
+**ClipperWatch** is a high-fidelity orbital tracking dashboard for NASA's Europa Clipper mission as well as other deep space spacecraft. It pulls real-time telemetry from JPL Horizons to render a mathematically accurate, minimalist 1080p map of the solar system, designed for use as a desktop lock screen / wallpaper.
 
 ![ClipperWatch Header](screenshots/clipper_watch.png)
 
@@ -28,10 +28,13 @@ Command Line Arguments
 Argument	Description
 --save	Saves the output directly to disk instead of opening a window.
 --output <name>.png	Sets a custom filename for the saved image (Default: clipper_watch.png).
+--list Lists all the supported spacecrafts
+--spacecraft <name> Select target spacecraft (Europa Clipper by default)
 
 Example:
 
     python3 clipperwatch.py --save --output lockscreen.png
+    python3 clipperwatch.py --spacecraft Lucy
 
 ## 📟 Systemd Integration
 

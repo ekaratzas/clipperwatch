@@ -1,6 +1,7 @@
 # ClipperWatch generated images
 *.png
 !screenshots/clipper_watch.png
+!screenshots/lucy_clipper_watch.png
 
 # Python environment and cache
 __pycache__/

@@ -2,11 +2,9 @@ import argparse
 from astropy import constants as const
 import astropy.units as u
 from astroquery.jplhorizons import Horizons
-from datetime import date, timedelta
+from datetime import date
 import matplotlib.pyplot as plt
 import numpy as np
-
-launch_date = date(2024, 10, 14)
 
 targets = [
     {"name": "Mercury", "color": "#A5A5A5", "size": 25, "isSpacecraft": False},
@@ -18,7 +16,20 @@ targets = [
     # {'name': 'Uranus', 'color': '#BBE1E4', 'size': 80, 'isSpacecraft': False},
     # {'name': 'Neptune', 'color': '#6081FF', 'size': 80, 'isSpacecraft': False},
     # {'name': 'Pluto', 'color': '#D6C6B2', 'size': 20, 'isSpacecraft': False},
-    {"name": "Europa Clipper", "color": "#E27B58", "size": 40, "isSpacecraft": True},
+    {
+        "name": "Europa Clipper",
+        "color": "#E27B58",
+        "size": 40,
+        "isSpacecraft": True,
+        "launch_date": date(2024, 10, 15),
+    },
+    {
+        "name": "Lucy",
+        "color": "#E27B58",
+        "size": 40,
+        "isSpacecraft": True,
+        "launch_date": date(2021, 10, 17),
+    },
 ]
 
 
@@ -38,23 +49,30 @@ def MapNameToJplId(name):
         "Neptune": "899",
         "Pluto": "999",
         "Europa Clipper": "2024-182A",
+        "Lucy": "2021-093A",
     }
     return idMap[name]
 
 
-def DateRangeWeeksAgo(weeks):
-    stop = date.today()
-    start = stop - timedelta(weeks=weeks)
-    return start.isoformat(), stop.isoformat()
+targetSpacecraft = None
+
+
+def FindTargetSpacecraft(name):
+    global targetSpacecraft
+    targetSpacecraft = next(
+        (target for target in targets if target["name"] == name), None
+    )
+    return targetSpacecraft
 
 
 # I tried parallelizing jpl GET requests but nasa starts throttling if > 2 parallel requests.
 # Even 2 parallel requests reduced execution time from 6 secs to 4 secs but not worth it imho.
-def GetAstroData(target, observer="Sun", timeRangeInWeeks=None):
+def GetAstroData(target, observer="Sun", getDataSinceLaunch=False):
     try:
         observerLocation = "500@" + MapNameToJplId(observer)
-        if timeRangeInWeeks is not None:
-            start, stop = DateRangeWeeksAgo(timeRangeInWeeks)
+        if getDataSinceLaunch:
+            stop = date.today().isoformat()
+            start = target["launch_date"].isoformat()
             obj = Horizons(
                 id=MapNameToJplId(target["name"]),
                 location=observerLocation,
@@ -77,8 +95,8 @@ def GetAstroData(target, observer="Sun", timeRangeInWeeks=None):
         # 33. Galactic longitude and latitude
         eph = obj.ephemerides(quantities="18,19,20")
         target["targetname"] = eph[0]["targetname"].split("(")[0]
-        if timeRangeInWeeks is not None:
-            ephKey = "ephWeeks" + observer
+        if getDataSinceLaunch:
+            ephKey = "ephSinceLaunch" + observer
             target[ephKey] = eph
         else:
             ephKey = "eph" + observer
@@ -113,7 +131,10 @@ def PlotTargets(ax):
     ax.scatter(0, 0, s=200, color="yellow", label="Sun", zorder=3)
 
     for obj in targets:
+        if obj["isSpacecraft"] and obj != targetSpacecraft:
+            continue
         GetAstroData(obj)
+        # print(obj)
         eph = obj["ephSun"]
         lon = eph["EclLon"]
         dist = eph["r"]
@@ -182,21 +203,23 @@ def PlotTargets(ax):
                 label=obj["targetname"],
             )
             ax.text(
-                x + 0.2, y + 0.2, "CLIPPER", color="cyan", fontsize=6, fontweight="bold"
+                x + 0.2,
+                y + 0.2,
+                obj["name"],
+                color="cyan",
+                fontsize=6,
+                fontweight="bold",
             )
 
 
 def PlotSpacecraftTail(ax):
-    obj = next(
-        (target for target in targets if target["name"] == "Europa Clipper"), None
-    )
-    weeks_passed = (date.today() - launch_date).days // 7
-    GetAstroData(obj, "Sun", weeks_passed)
+    obj = targetSpacecraft
+    GetAstroData(obj, "Sun", True)
 
     x_list = []
     y_list = []
 
-    for week in obj["ephWeeksSun"]:
+    for week in obj["ephSinceLaunchSun"]:
         lon = week["EclLon"]
         dist = week["r"]
 
@@ -238,18 +261,17 @@ def GetSignalDelay(obj):
     return message
 
 
-def GetMissionDays():
-    days_passed = (date.today() - launch_date).days
+def GetMissionDays(obj):
+    days_passed = (date.today() - obj["launch_date"]).days
     return f"Mission day: {days_passed}"
 
 
 def PlotTitleLegendStatusBar(ax):
-    plt.title("Europa Clipper Mission Status", color="white", fontsize=15, pad=20)
+    title = f"{targetSpacecraft['name']} Mission Status"
+    plt.title(title, color="white", fontsize=15, pad=20)
     plt.legend(loc="upper right", frameon=False)
 
-    obj = next(
-        (target for target in targets if target["name"] == "Europa Clipper"), None
-    )
+    obj = targetSpacecraft
 
     GetAstroData(obj, observer="Earth")
     GetAstroData(obj, observer="Europa")
@@ -258,7 +280,7 @@ def PlotTitleLegendStatusBar(ax):
     {obj["name"]}
     System Status: Nominal
     Epoch: {obj["ephSun"]["datetime_str"]}
-    {GetMissionDays()}
+    {GetMissionDays(obj)}
     {GetSignalDelay(obj)}
     {GetDistSpeedFrom(obj, "Sun")}
     {GetDistSpeedFrom(obj, "Earth")}
@@ -300,6 +322,14 @@ def Plot(save_on_disk, filename):
     PrintOrSave(save_on_disk, filename)
 
 
+def ListSpacecraft():
+    print("Listing spacecraft...")
+    for target in targets:
+        if target["isSpacecraft"]:
+            print(target["name"])
+    exit(0)
+
+
 def main():
     parser = argparse.ArgumentParser(
         description="ClipperWatch: Real-time Europa Clipper Tracking"
@@ -316,9 +346,28 @@ def main():
         default="clipper_watch.png",
         help="Filename for the saved image (default: clipper_watch.png)",
     )
+    parser.add_argument(
+        "--list",
+        action="store_true",
+        help="List supported spacecraft",
+    )
+    parser.add_argument(
+        "--spacecraft",
+        type=str,
+        default="Europa Clipper",
+        help="spacecraft to display (default: Europa Clipper)",
+    )
     args = parser.parse_args()
 
     print("Starting ClipperWatch...")
+
+    if args.list:
+        ListSpacecraft()
+
+    if FindTargetSpacecraft(args.spacecraft) is None:
+        print(f"Spacecraft {args.spacecraft} not found!")
+        exit(1)
+
     if args.save:
         print(f"Mode: Save to disk -> {args.output}")
     else:
