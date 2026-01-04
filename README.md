@@ -30,6 +30,7 @@ Argument	Description
 --output <name>.png	Sets a custom filename for the saved image (Default: clipper_watch.png).
 --list Lists all the supported spacecrafts
 --spacecraft <name> Select target spacecraft (Europa Clipper by default)
+--random Select target spacecraft at random!
 
 Example:
 

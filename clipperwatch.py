@@ -5,6 +5,7 @@ from astroquery.jplhorizons import Horizons
 from datetime import date
 import matplotlib.pyplot as plt
 import numpy as np
+import random
 
 targets = [
     {"name": "Mercury", "color": "#A5A5A5", "size": 25, "isSpacecraft": False},
@@ -144,6 +145,15 @@ def FindTargetSpacecraft(name):
     )
     return targetSpacecraft
 
+def GetRandomSpacecraft():
+    global targetSpacecraft
+    count = sum(1 for target in targets if target["isSpacecraft"] is True)
+    n = random.randrange(count)
+    for i, target in enumerate(target for target in targets if target["isSpacecraft"] is True):
+        if i == n:
+            print(f"Selected {target['name']}!")
+            targetSpacecraft = target
+            return targetSpacecraft
 
 # I tried parallelizing jpl GET requests but nasa starts throttling if > 2 parallel requests.
 # Even 2 parallel requests reduced execution time from 6 secs to 4 secs but not worth it imho.
@@ -437,6 +447,11 @@ def main():
         default="Europa Clipper",
         help="spacecraft to display (default: Europa Clipper)",
     )
+    parser.add_argument(
+        "--random",
+        action="store_true",
+        help="Choose a spacecraft at random",
+    )
     args = parser.parse_args()
 
     print("Starting ClipperWatch...")
@@ -444,7 +459,9 @@ def main():
     if args.list:
         ListSpacecraft()
 
-    if FindTargetSpacecraft(args.spacecraft) is None:
+    if args.random:
+        GetRandomSpacecraft()
+    elif FindTargetSpacecraft(args.spacecraft) is None:
         print(f"Spacecraft {args.spacecraft} not found!")
         exit(1)
 
