@@ -5,10 +5,10 @@
 ![ClipperWatch Header](screenshots/clipper_watch.png)
 
 ## 🚀 Features
-- **Real-time Tracking:** Pulls live ephemeris data for the Sun, Planets, and Europa Clipper.
+- **Real-time Tracking:** Pulls live ephemeris data for the Sun, Planets, and the target spacecraft.
 - **Accurate Physics:** Orbits are rendered as Keplerian ellipses using orbital elements.
 - **Mission HUD:** Displays mission day, light-speed signal delay, and relative velocities (Sun, Earth, Europa).
-- **Spacecraft "Comet Tail":** Visualizes the trail of the Clipper's trajectory.
+- **Spacecraft "Comet Tail":** Visualizes the trail of the spacecraft's trajectory.
 
 ## 🛠️ Install dependencies
 

@@ -30,6 +30,55 @@ targets = [
         "isSpacecraft": True,
         "launch_date": date(2021, 10, 17),
     },
+    {
+        "name": "Escapade Blue",
+        "color": "#E27B58",
+        "size": 40,
+        "isSpacecraft": True,
+        "launch_date": date(2025, 11, 14),
+    },
+    {
+        "name": "Escapade Gold",
+        "color": "#E27B58",
+        "size": 40,
+        "isSpacecraft": True,
+        "launch_date": date(2025, 11, 14),
+    },
+    {
+        "name": "Parker",
+        "color": "#E27B58",
+        "size": 40,
+        "isSpacecraft": True,
+        "launch_date": date(2018, 8, 13),
+    },
+    {
+        "name": "Psyche",
+        "color": "#E27B58",
+        "size": 40,
+        "isSpacecraft": True,
+        "launch_date": date(2023, 10, 14),
+    },
+    {
+        "name": "Juice",
+        "color": "#E27B58",
+        "size": 40,
+        "isSpacecraft": True,
+        "launch_date": date(2023, 4, 15),
+    },
+    {
+        "name": "Osiris",
+        "color": "#E27B58",
+        "size": 40,
+        "isSpacecraft": True,
+        "launch_date": date(2016, 9, 9),
+    },
+    {
+        "name": "Juno",
+        "color": "#E27B58",
+        "size": 40,
+        "isSpacecraft": True,
+        "launch_date": date(2011, 8, 6),
+    }
 ]
 
 
@@ -50,6 +99,13 @@ def MapNameToJplId(name):
         "Pluto": "999",
         "Europa Clipper": "2024-182A",
         "Lucy": "2021-093A",
+        "Escapade Blue": "2025-260A",
+        "Escapade Gold": "2025-260B",
+        "Parker": "2018-065A",
+        "Juice": "2023-053A",
+        "Psyche": "2023-157A",
+        "Juno": "2011-040A",
+        "Osiris": "2016-055A",
     }
     return idMap[name]
 
