@@ -73,6 +73,27 @@ targets = [
         "launch_date": date(2016, 9, 9),
     },
     {
+        "name": "Voyager 1",
+        "color": "#E27B58",
+        "size": 40,
+        "isSpacecraft": True,
+        "launch_date": date(1977, 9, 7),
+    },
+    {
+        "name": "Voyager 2",
+        "color": "#E27B58",
+        "size": 40,
+        "isSpacecraft": True,
+        "launch_date": date(1977, 8, 21),
+    },
+    {
+        "name": "New Horizons",
+        "color": "#E27B58",
+        "size": 40,
+        "isSpacecraft": True,
+        "launch_date": date(2006, 1, 20),
+    },
+    {
         "name": "Juno",
         "color": "#E27B58",
         "size": 40,
@@ -106,6 +127,9 @@ def MapNameToJplId(name):
         "Psyche": "2023-157A",
         "Juno": "2011-040A",
         "Osiris": "2016-055A",
+        "Voyager 1": "1977-084A",
+        "Voyager 2": "1977-076A",
+        "New Horizons": "2006-001A",
     }
     return idMap[name]
 

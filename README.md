@@ -63,4 +63,14 @@ Coordinate System: Heliocentric Ecliptic (J2000)
 
 Scale: 1 unit = 1 Astronomical Unit (AU).
 
+## 📡 Cool links
+
+NASA has quite a few cool websites that can be used to gather data and track spacecraft:
+
+https://eyes.nasa.gov/apps/solar-system/#/sc_europa_clipper
+
+https://ssd.jpl.nasa.gov/horizons/app.html#/
+
+https://eyes.nasa.gov/apps/dsn-now/dsn.html
+
 **Disclaimer:** This project is a fan-made tool and is not officially affiliated with NASA or JPL.
